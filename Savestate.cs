@@ -14,6 +14,14 @@ namespace Minisavestates {
 			dat = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
 		}
 
+		public void SetValue(string key, dynamic value) {
+			dat["savedPlayerData"][key] = value;
+			Console.WriteLine($"Setting {dat["savedPlayerData"]} to {dat["savedPlayerData"][key]} ({dat["savedPlayerData"][key].GetType()})");
+		}
+
+		public void CheckValue(string key) {
+			Console.WriteLine($"{dat["savedPlayerData"]} : {dat["savedPlayerData"][key]} ({dat["savedPlayerData"][key].GetType()})");
+		}
 
 		public override string ToString() {
 			var output = "";

@@ -100,12 +100,17 @@ namespace Minisavestates {
 		private static bool ParseCommand(string[] v, Savestate save) {
 			try {
 				switch (v[0]) {
+
 					case "save":
 						save.Save();
 						break;
+
+					case "exit":
 					case "quit":
 						save.Save();
 						return true;
+
+					// charms
 					case "equip":
 						EquipCharm(v[1]);
 						break;
@@ -113,9 +118,16 @@ namespace Minisavestates {
 					case "unequip":
 						RemoveCharm(v[1]);
 						break;
+
 					case "set":
+						SetValue(v[1..]);
 						break;
+
 					case "check":
+						CheckValue(v[1..]);
+						break;
+
+					default:
 						break;
 				}
 			}
@@ -125,27 +137,53 @@ namespace Minisavestates {
 			return false;
 
 		}
+
+		private static void SetValue(string[] v) {
+			switch (v[0]) {
+
+				case "nail":
+				case "naildmg":
+					user.SetValue("nailDamage", int.Parse(v[1]));
+					break;
+				case "lifeblood":
+				case "bluehp":
+					user.SetValue("healthBlue", int.Parse(v[1]));
+					break;
+				case "hp":
+				case "health":
+					user.SetValue("health", int.Parse(v[1]));
+					break;
+				case "maxhp":
+				case "maxhealth":
+					user.SetValue("maxHealth", int.Parse(v[1]));
+					break;
+				case "geo":
+					user.SetValue("geo", int.Parse(v[1]));
+					break;
+				default:
+					Console.WriteLine($"Could not parse {v[0]}");
+					return;
+			}
+		}
+
+		private static void CheckValue(string[] v) {
+			throw new NotImplementedException();
+		}
+
 		private static void EquipCharm(string v) {
 
 			if (charmIDs.ContainsKey(v)) {
 				var id = charmIDs[v];
-				user.dat["savedPlayerData"][$"gotCharm_{id}"] = true;
-				user.dat["savedPlayerData"][$"equippedCharm_{id}"] = true;
-
-				if (!user.dat["savedPlayerData"]["equippedCharms"].Contains(id)) {
-					user.dat["savedPlayerData"]["equippedCharms"].Add(id);
-				}
+				user.SetValue($"gotCharm_{id}", true);
+				user.SetValue($"equippedCharm_{id}", true);
 
 				Console.WriteLine($"Equipped {v} ({id})");
-
 			}
+
 			else {
 				Console.WriteLine($"Unknown charm {v}");
 				return;
 			}
-
-
-
 
 		}
 
@@ -153,22 +191,15 @@ namespace Minisavestates {
 
 			if (charmIDs.ContainsKey(v)) {
 				var id = charmIDs[v];
-				user.dat["savedPlayerData"][$"equippedCharm_{id}"] = false;
-
-				if (user.dat["savedPlayerData"]["equippedCharms"].Contains(id)) {
-					user.dat["savedPlayerData"]["equippedCharms"].Remove(id);
-				}
+				user.SetValue($"equippedCharm_{id}", false);
 
 				Console.WriteLine($"Unequipped {v}");
-
 			}
+
 			else {
 				Console.WriteLine($"Unknown charm {v}");
 				return;
 			}
-
-
-
 
 		}
 
