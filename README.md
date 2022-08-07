@@ -1,7 +1,6 @@
 # minisavestate_editor
 
 type set to set a json value
+or equip/unequip to deal with charms
 
-some of them don't work
-
-i need to fix those
+some commands might not work properly
