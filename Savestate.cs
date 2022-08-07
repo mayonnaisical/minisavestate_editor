@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using static Newtonsoft.Json.Formatting;
+using static Newtonsoft.Json.JsonConvert;
 
 namespace Minisavestates {
 	class Savestate {
@@ -11,7 +12,7 @@ namespace Minisavestates {
 
 			string json = File.ReadAllText("minisavestates-saved.json");
 
-			dat = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
+			dat = DeserializeObject<Dictionary<string, dynamic>>(json);
 		}
 
 		public void SetValue(string key, dynamic value) {
@@ -38,7 +39,7 @@ namespace Minisavestates {
 		public void Save() {
 			Environment.CurrentDirectory = dir;
 
-			string json = JsonConvert.SerializeObject(dat, Formatting.Indented);
+			string json = SerializeObject(dat, Indented);
 
 			File.WriteAllText("minisavestates-saved.json", json);
 

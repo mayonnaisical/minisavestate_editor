@@ -1,5 +1,4 @@
-﻿using System;
-namespace Minisavestates {
+﻿namespace Minisavestates {
 	class Editor {
 
 		public static Dictionary<string, int> charmIDs = new Dictionary<string, int>() {
@@ -112,11 +111,11 @@ namespace Minisavestates {
 
 					// charms
 					case "equip":
-						EquipCharm(v[1]);
+						EquipCharm(string.Join(' ', v[1..]));
 						break;
 					case "remove":
 					case "unequip":
-						RemoveCharm(v[1]);
+						RemoveCharm(string.Join(' ', v[1..]));
 						break;
 
 					case "set":
@@ -426,7 +425,7 @@ namespace Minisavestates {
 		}
 
 		private static void SetValue(string[] v) {
-			switch (v[0]) {
+			switch (string.Join('\u0000', v[0..^1])) {
 
 				case "nail":
 				case "naildmg":
@@ -454,7 +453,7 @@ namespace Minisavestates {
 					var soul = int.Parse(v[1]);
 					var res = soul > 100 ? soul % 99 : 0;
 					user.SetValue("MPCharge", soul);
-					user.SetValue("MPReserve", soul);
+					user.SetValue("MPReserve", res);
 					break;
 				case "vessels":
 					var x = int.Parse(v[1]);
